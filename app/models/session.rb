@@ -26,11 +26,7 @@ class Session
             scopes: @scopes
     }
     unless @access_token.nil?
-      temp[:access_token] = {
-          expires_at: @access_token.expires_at,
-          token: @access_token.token,
-          refresh_token: @access_token.refresh_token
-      }
+      temp[:access_token] = @access_token.to_hash
     end
     temp.to_json
   end

@@ -1,7 +1,7 @@
-<h1>Session#login</h1>
+<h1>Session Login</h1>
 
 <% if @current_session.nil? %>
-  <%= render partial: 'session/session_form', session: @session %>
+  <%= render partial: 'session/session_form', locals: {new_session: @new_session} %>
 <% else %>
   <%= render partial: 'session/session_view', locals: {current_session: @current_session} %>
 <% end %>

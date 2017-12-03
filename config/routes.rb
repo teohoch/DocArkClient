@@ -6,6 +6,12 @@ Rails.application.routes.draw do
 
   delete 'session/logout', :as => :destroy_session
 
+  resources :folders
+
+  resources :files, controller: 'documents', as: 'documents' do
+    get 'upgrade', on: :member
+  end
+
   root to: 'session#login'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

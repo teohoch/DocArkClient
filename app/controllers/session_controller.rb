@@ -1,7 +1,7 @@
 class SessionController < ApplicationController
   def login
     if get_current_session.nil?
-      @session = Session.new
+      @new_session = Session.new
     else
       @current_session = get_current_session
     end
