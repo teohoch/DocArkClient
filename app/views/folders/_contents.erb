@@ -21,7 +21,7 @@
 
       <% unless current_folder.root? %>
           <li class="list-group-item">
-            <%= link_to "#{t('editing')} #{t('folder.folder')}", edit_folder_path(current_folder), html_options={class: 'btn btn-primary '} %>
+            <%= link_to "#{t('editing')} #{t('folder.folder')}", edit_folder_path(current_folder.id), html_options={class: 'btn btn-primary '} %>
           </li>
       <% end %>
       </ul>

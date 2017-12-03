@@ -1,12 +1,13 @@
-class File
+class Document
   include ActiveModel::Model
-  attr_reader :id, :name, :id_parent_folder, :full_path, :created_at,
+  attr_accessor :id, :name, :id_parent_folder, :full_path, :created_at,
               :created_by, :updated_at, :updated_by, :type, :access_url,
-              :expiration_date, :version, :type, :available_versions
+              :expiration_date, :version, :type, :available_versions,
+              :size
 
   def initialize(options)
     super(options)
-    @type = 1
+    @type = 0
     @available_versions = get_available_versions
   end
 

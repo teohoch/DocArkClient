@@ -1,15 +1,17 @@
 class FoldersController < ApplicationController
   before_action :authorize
-  before_action :set_consumer
+  before_action :set_folder_consumer
+  before_action :set_document_consumer, only: [:show, :index]
 
 
   # GET /folders
   # GET /folders.json
   def index
     # base_url, token, app_id, app_secret
-
-    temp = @client.index({id_parent_folder: -1})
+    temp = @folder_client.index({id_parent_folder: -1})
     @contents = temp[:data]
+    temp2 = @document_client.index(id_parent_folder: -1)
+    @contents = @contents + temp2[:data]
     @current_folder = Folder.new({name: 'Root'})
 
   end
@@ -17,9 +19,12 @@ class FoldersController < ApplicationController
   # GET /folders/1
   # GET /folders/1.json
   def show
-    temp = @client.index({id_parent_folder: params[:id]})
+    temp = @folder_client.index(id_parent_folder: params[:id])
     @contents = temp[:data]
-    @folder = @client.find(id: params[:id])
+    temp2 = @folder_client.find(id: params[:id])
+    @folder = temp2[:data]
+    temp3 = @document_client.index(id_parent_folder: params[:id])
+    @contents = @contents + temp3[:data]
   end
 
   # GET /folders/new
@@ -74,7 +79,12 @@ class FoldersController < ApplicationController
 
   private
 
-  def set_consumer
-    @client = FolderConsumer.new(@current_session[:url], @current_session[:access_token], @current_session[:app_id], @current_session[:app_secret])
+  def set_folder_consumer
+    @folder_client = FolderConsumer.new(@current_session[:url], @current_session[:access_token], @current_session[:app_id], @current_session[:app_secret])
   end
+
+  def set_document_consumer
+    @document_client = DocumentConsumer.new(@current_session[:url], @current_session[:access_token], @current_session[:app_id], @current_session[:app_secret])
+  end
+
 end

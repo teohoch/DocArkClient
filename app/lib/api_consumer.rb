@@ -7,7 +7,7 @@ class ApiConsumer
     @base_url = base_url
     @client = OAuth2::Client.new(app_id, app_secret, site: base_url)
     @token = OAuth2::AccessToken.from_hash(@client,token)
-    unless @token.expired?
+    if @token.expired?
       begin
         @token = @token.refresh!
         @valid = true

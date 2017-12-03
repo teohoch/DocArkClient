@@ -5,7 +5,8 @@ class FolderConsumer < ApiConsumer
   end
 
   def index(options={})
-    response = get(query_params: options.slice(:name, :id_parent_folder, :limit=, :offset))
+    response = get(query_params: options.slice(:name,
+                                               :id_parent_folder, :limit=, :offset))
     success = false
     data = []
     if response.code == 200
@@ -22,9 +23,9 @@ class FolderConsumer < ApiConsumer
     success = false
     data = nil
     if response.code == 200
-      Folder.new(JSON.parse(response.body))
+      data = Folder.new(JSON.parse(response.body))
       success = true
     end
-    {response: JSON.parse(response.body), status: success, data: data}
+    { response: JSON.parse(response.body), status: success, data: data }
   end
 end
