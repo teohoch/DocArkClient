@@ -15,7 +15,8 @@ class DocumentConsumer < ApiConsumer
       end
       success = true
     end
-    {response: JSON.parse(response.body), status: success, data: data}
+    { response: JSON.parse(response.body), status: success,
+      data: data, request: response.request}
   end
 
   def find(id)
@@ -26,6 +27,31 @@ class DocumentConsumer < ApiConsumer
       data = Folder.new(JSON.parse(response.body))
       success = true
     end
-    { response: JSON.parse(response.body), status: success, data: data }
+    { response: JSON.parse(response.body), status: success,
+      data: data, request: response.request}
+  end
+
+  def create(body = {})
+    response = post(body: body.to_json)
+    success = false
+    data = nil
+    if response.code == 200
+      data = Document.new(JSON.parse(response.body))
+      success = true
+    end
+    { response: JSON.parse(response.body), status: success,
+      data: data, request: response.request}
+  end
+
+  def update(id, body)
+    response = patch(id: id, body: body.to_json)
+    success = false
+    data = nil
+    if response.code == 200
+      data = Document.new(JSON.parse(response.body))
+      success = true
+    end
+    { response: JSON.parse(response.body), status: success,
+      data: data, request: response.request}
   end
 end

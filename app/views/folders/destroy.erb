@@ -1,0 +1,19 @@
+<div class="container alert alert-danger show">
+
+    <h1 class="text-center"><%= "¡Cuidado! ¡La carpeta que desea eliminar contiene elementos!" %></h1>
+</div>
+<br>
+  <h3 class="text-center"><%= '¿Esta seguro de que desea eliminarla?' %></h3>
+
+<div class="container">
+
+  <br>
+  <div class="row">
+    <div class="col-sm text-center">
+      <%= link_to "#{t('delete')} #{t('folder.folder')}", folder_path(@id, force: 1), html_options={class: 'btn btn-danger', method: :delete} %>
+    </div>
+    <div class="col-sm  text-center">
+      <%= link_to t('back'), folder_path(@id), html_options={class: 'btn btn-primary'} %>
+    </div>
+  </div>
+</div>

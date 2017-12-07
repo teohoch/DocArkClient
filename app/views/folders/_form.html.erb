@@ -1,28 +1,31 @@
-<%= simple_form_for(@folder) do |f| %>
+<%= simple_form_for(@folder, url: folder_path(@folder.id), method: method) do |f| %>
   <%= f.error_notification %>
 
   <div class="form-inputs">
     <%= f.input :name %>
     <% if @fixed %>
-        <% if @folder.parent_folder.nil? %>
-            <%= f.association :parent_folder, collection: [] ,
+        <% if @folder.id_parent_folder.nil? %>
+            <%= f.input :id_parent_folder,
+                              as: :select,
+                              collection: [] ,
                               :include_blank => '/',
-                              :label_method => lambda { |parent| "#{parent.decorate.full_path}" } %>
+                              :label_method => lambda { |parent| "#{parent.full_path}" } %>
         <% else %>
-            <%= f.association :parent_folder,
-                              collection: Folder.where(id: @folder.parent_folder_id),
+            <%= f.input :id_parent_folder,
+                              as: :select,
+                              collection: @collection,
                               :include_blank => false,
-                              :label_method => lambda { |parent| "#{parent.decorate.full_path}" } %>
+                              :label_method => lambda { |parent| "#{parent.full_path}" } %>
         <% end %>
     <% else %>
-        <%= f.association :parent_folder,
+        <%= f.input :id_parent_folder,
                           :include_blank => '/',
-                          collection: Folder.is_owner(current_user.id).where.not(id: @folder.id),
-                          :label_method => lambda { |parent| "#{parent.decorate.full_path}" } %>
+                          collection: @collection,
+                          :label_method => lambda { |parent| "#{parent.full_path}" } %>
     <% end %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit %>
+    <%= f.button :submit, ( f.object.id.nil? ? t('helpers.submit.folder.create')  : t('helpers.submit.folder.edit')) %>
   </div>
 <% end %>

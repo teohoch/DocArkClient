@@ -74,6 +74,7 @@ es:
             created_at: "Creado"
             updated_at: "Actualizado"
             parent_folder: "Carpeta padre"
+            id_parent_folder: "Carpeta padre"
           document:
             name: 'Nombre'
             created_at: "Creado"
@@ -88,3 +89,8 @@ es:
 
         folder:
           create: "Crear Carpeta"
+          edit: "Editar Carpeta"
+  error:
+    provide_id: "¡Debe proveer el ID del elemento que quire buscar!"
+    provide_create_parameters: "¡Debes proveer todos los parametros nesesarios para crear el recurso!"
+  delete: "Eliminar"

@@ -12,7 +12,7 @@ class ApiConsumer
         @token = @token.refresh!
         @valid = true
       rescue RuntimeError
-          @valid = false
+        @valid = false
       end
     end
   end
@@ -25,25 +25,66 @@ class ApiConsumer
 
   def get(id: nil, query_params: {})
     temp = generate_url(id,query_params)
-    RestClient.get(temp.to_s,headers={:Authorization => "Bearer #{token.token}"})
+    begin
+      RestClient.get(temp.to_s, Authorization: "Bearer #{token.token}")
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    rescue RestClient::ServerBrokeConnection => e
+      e.response
+    end
   end
 
-  def post(id: nil, query_params: {}, body: {})
+  def post(id: nil, query_params: {}, body: {}, format: :json)
     temp = generate_url(id,query_params)
-    RestClient.post(temp.to_s, body, headers={:Authorization => "Bearer #{token.token}"})
+    begin
+      RestClient.post(temp.to_s, body, Authorization: "Bearer #{token.token}", Content_type: format)
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    rescue RestClient::ServerBrokeConnection => e
+      e.response
+    end
+  end
+
+  def patch(id: nil, query_params: {}, body: {}, format: :json)
+    temp = generate_url(id,query_params)
+    begin
+      RestClient.patch(temp.to_s, body, Authorization: "Bearer #{token.token}", Content_type: format)
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    rescue RestClient::ServerBrokeConnection => e
+      e.response
+    end
+  end
+
+  def put(id: nil, query_params: {}, body: {})
+    temp = generate_url(id,query_params)
+    begin
+      RestClient.post(temp.to_s, body, Authorization: "Bearer #{token.token}", multipart: true )
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    rescue RestClient::ServerBrokeConnection => e
+      e.response
+    end
   end
 
   def delete(id: nil, query_params: {})
     temp = generate_url(id,query_params)
-    RestClient.delete(temp.to_s,headers={:Authorization => "Bearer #{token.token}"})
+    begin
+      RestClient.delete(temp.to_s,headers={Authorization: "Bearer #{token.token}"})
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    rescue RestClient::ServerBrokeConnection => e
+      e.response
+    end
+
   end
 
   def generate_url(id=nil,query_params={})
-    if id.nil?
-      temp = resourse_url.dup
+    temp = if id.nil?
+      resourse_url.dup
     else
-      temp = URI.join(resourse_url.to_s, "#{id.to_s}")
-    end
+      URI.join(resourse_url.to_s, id.to_s.to_s)
+           end
     temp_queries = []
     query_params.each do |key, value|
       temp_queries.append([key,value])
@@ -51,4 +92,5 @@ class ApiConsumer
     temp.query = URI.encode_www_form(temp_queries)
     temp
   end
+
 end

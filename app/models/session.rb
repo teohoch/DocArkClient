@@ -4,8 +4,11 @@ class Session
 
   def initialize(options=nil)
     super(options)
-    @scopes = @scopes.nil? ? %w(read write delete) :
-                  @scopes.kind_of?(Array) ? @scopes : @scopes.split(' ')
+    @scopes = if @scopes.nil? then
+                %w(read write delete)
+              else
+                @scopes.kind_of?(Array) ? @scopes : @scopes.split(' ')
+              end
     @client = OAuth2::Client.new(@app_id, @app_secret, site: @url)
     @callback = URI.join($root_url, Rails.application.routes.url_helpers.oauth_callback_path)
   end
